@@ -67,14 +67,15 @@ module Main where
   -- Gets a random move in the bd's range.
   getRandMove :: [[Int]] -> Int -> IO Int
   getRandMove bd p = do
-    x <- randomRIO (0, 6 :: Int)
+    x <- randomRIO (0, numCol - 1 :: Int)
     if (isSlotOpen bd x)
     then printAndReturn x
     else getRandMove bd p
     where
       printAndReturn slotNum = do
-        putStrLn ("Player " ++ show p ++ " moved: " ++ show (numSlot bd - slotNum))
+        putStrLn ("Player " ++ show p ++ " moved: " ++ show (numCol - slotNum))
         return slotNum
+      numCol = numSlot bd    
 
   -- Determines the next strategy based on the player type.
   selectStrat :: Int -> ([[Int]] -> Int -> IO Int)
@@ -152,11 +153,11 @@ module Main where
     | otherwise = (False, "")
 
   -- Creates a String indices from curr to high value.
-  createIndices :: Int -> Int -> String
-  createIndices curr high
-    | curr > high =  "\n"
-    | otherwise = convertToStr ++ " " ++ createIndices (curr + 1) high
-    where convertToStr = show curr
+--  createIndices :: Int -> Int -> String
+--  createIndices curr high
+--    | curr > high =  "\n"
+--    | otherwise = convertToStr ++ " " ++ createIndices (curr + 1) high
+--    where convertToStr = show curr
 
   -- Applies the moveStrat or readSlot and returns the slot value.
   -- If the p is mkPlayer, then readSlot is called, otherwise the moveStrat
@@ -168,7 +169,7 @@ module Main where
 
   -- Sets the skipIt tuple based on the current player p.
   nextSkipIt :: Int -> (Bool, Bool) -> (Bool, Bool)
-  nextSkipIt p (skipsOk, skipIt)
+  nextSkipIt p (skipsOk, _)
     | p == mkPlayer = (skipsOk, True)
     | otherwise = (skipsOk, False)
 
@@ -176,9 +177,14 @@ module Main where
   showBoard :: [[Int]] -> IO ()
   showBoard bd = do
     putStr (boardToStr playerToChar bd)
-    putStrLn (createIndices 1 7)
+    putStrLn (createIndices 1 (numSlot bd))
+    where 
+        createIndices curr high
+            | curr > high =  "\n"
+            | otherwise = (show curr) ++ " " ++ createIndices (curr + 1) high
 
-  -- Prints board if skipsOk and skipIt is true.
+  -- Prints board as long as skipIt and skipsOk are not both
+  -- true.
   showBoardBasedOnSkip :: [[Int]] -> (Bool, Bool) -> IO ()
   showBoardBasedOnSkip bd (skipsOk, skipIt)
     | skipsOk && skipIt = do return ()

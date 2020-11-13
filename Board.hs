@@ -6,7 +6,7 @@
 -- Board representation that performs all the logic such as creating the board,
 -- representing the board as a string, and determining if a move was a
 -- winning move.
-module Board where
+module Board
   (isWonBy
   , isSlotOpen
   , dropInSlot
