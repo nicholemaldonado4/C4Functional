@@ -9,7 +9,7 @@ module Main where
   import Board
   import System.IO
   import System.Random
-
+  
   -- Maps a player to its char representation.
   playerToChar :: Int -> Char
   playerToChar 0 = '.'
@@ -27,12 +27,12 @@ module Main where
   checkValidSlot :: [[Int]] -> [(Int, String)] -> String -> (Int, String)
   checkValidSlot bd parsed origInput
     | result == -2 || result == - 1 = (result, msg)
-    | not (isSlotOpen bd result) = (-2, "The current slot is full")
-    | otherwise = (width - result, msg)
+    | not (isSlotOpen bd updatedResult) = (-2, "The current slot is full")
+    | otherwise = (updatedResult, msg)
     where 
         (result, msg) = getInRange parsed width origInput
         width = numSlot bd
-    
+        updatedResult = width - result
 
   -- Checks if the parsedInput is in the range [1, maxBound].
   -- If the user decides to quit, (-1, "") will be returned. If an error occurred
