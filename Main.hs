@@ -50,7 +50,7 @@ module Main where
   -- board's range will be returned.
   readSlot :: [[Int]] -> Int -> IO Int
   readSlot bd p = do
-    line <- getSingleLine ("Enter a slot [1, " ++ (bdWidth bd) ++ "] for player " ++ player p ++ ": ")
+    line <- getSingleLine ("Enter a slot [1, " ++ (bdWidth bd) ++ "] for player " ++ player ++ ": ")
     putStrLn ""
     let parsed = reads line :: [(Int, String)] in
       let (x, y) = checkValidSlot bd parsed line in
@@ -58,7 +58,7 @@ module Main where
         then retry y
         else return x
     where
-      player p = show p
+      player = [playerToChar p]
       bdWidth bd = show (numSlot bd)
       retry msg = do
         putStrLn msg
@@ -73,7 +73,7 @@ module Main where
     else getRandMove bd p
     where
       printAndReturn slotNum = do
-        putStrLn ("Player " ++ show p ++ " moved: " ++ show (numCol - slotNum))
+        putStrLn ("Player " ++ [playerToChar p] ++ " moved: " ++ show (numCol - slotNum))
         return slotNum
       numCol = numSlot bd    
 
@@ -123,10 +123,10 @@ module Main where
     putStrLn "Welcome to Connect 4!"
     putStrLn "---------------------"
     putStrLn "Rules of the Game: "
-    putStrLn "> Player 1 will be O tokens"
-    putStrLn "> Player 2 will be X tokens*"
+    putStrLn "> Player O will have O tokens"
+    putStrLn "> Player X will have X tokens*"
     putStrLn "> Enter :q to quit at anytime"
-    putStrLn " * If computer mode selected, then the computer will be player 2\n"
+    putStrLn " * If computer mode selected, then the computer will have X tokens\n"
 
   -- Main method that runs the Connect 4 application.
   main :: IO ()
@@ -148,16 +148,9 @@ module Main where
   -- returned.
   checkWinOrDraw :: [[Int]] -> Int -> (Bool, String)
   checkWinOrDraw bd p
-    | isWonBy bd p = (True, "Player " ++ show p ++ " won!!!")
+    | isWonBy bd p = (True, "Player " ++ [playerToChar p] ++ " won!!!")
     | isFull bd = (True, "The game was a draw!")
     | otherwise = (False, "")
-
-  -- Creates a String indices from curr to high value.
---  createIndices :: Int -> Int -> String
---  createIndices curr high
---    | curr > high =  "\n"
---    | otherwise = convertToStr ++ " " ++ createIndices (curr + 1) high
---    where convertToStr = show curr
 
   -- Applies the moveStrat or readSlot and returns the slot value.
   -- If the p is mkPlayer, then readSlot is called, otherwise the moveStrat
@@ -176,7 +169,7 @@ module Main where
   -- Prints the bd.
   showBoard :: [[Int]] -> IO ()
   showBoard bd = do
-    putStr (boardToStr playerToChar bd)
+    putStrLn (boardToStr playerToChar bd)
     putStrLn (createIndices 1 (numSlot bd))
     where 
         createIndices curr high

@@ -62,7 +62,7 @@ module Board
     | bd == [] || bd == [[]] || i < 0 || i >= (numSlot bd) || bd!!i == [] = False
     | otherwise = head (bd!!i) == mkEmpty
 
-  -- Returns the number of columns of a board bd
+  -- Returns the number of columns of a board bd.
   numSlot :: [[Int]] -> Int
   numSlot bd = length bd
 
@@ -153,7 +153,7 @@ module Board
         lNextPts x y = (x - 1, y + 1)
         height = numSlot bd
 
-  -- Finds the first column of a row that is empty.
+  -- Finds the first column of a row that is not empty.
   findCol [] = 0
   findCol (x:xs)
     | x == mkEmpty = 1 + findCol xs
@@ -192,7 +192,7 @@ module Board
   -- Checks the lower diagonal to see if a valid win exists. The colRowCheck
   -- checks to see if the current (col, row) are in the bounds of the board (bd).
   -- The nextPoints provides a function on how to navigate to the next point
-  -- The expectedDount is the number of same color p pieces that need to be
+  -- The expectedCount is the number of same color p pieces that need to be
   -- found. Returns true if the expectedCount of pieces were found.
   lowerDiag :: [[Int]] -> (Int -> Int -> Bool) -> Int -> (Int -> Int ->
     (Int, Int)) -> (Int, Int) -> Int -> Bool
@@ -212,7 +212,9 @@ module Board
     where 
         goThroughCols currCol maxCol
             | currCol >= maxCol = ""
-            | otherwise = (colToStr bd currCol playerToChar) ++ "\n" ++ goThroughCols (currCol + 1) maxCol
+            | otherwise = (colToStr bd currCol playerToChar) ++ seperator ++ goThroughCols (currCol + 1) maxCol
+            where 
+                seperator = if currCol + 1 == maxCol then "" else "\n"
 
   -- Converts a row of a 2d matrix to a string. The 2d matrix represents
   -- the board bd so the string will actually represent a row of the bd.
@@ -220,5 +222,8 @@ module Board
   -- playerToChar is a function that converts a player to a character representation.
   colToStr :: [[Int]] -> Int -> (Int -> Char) -> [Char]    
   colToStr [] _ _ = ""
-  colToStr [x] currCol playerToChar = [playerToChar (x!!currCol)]
-  colToStr (x:xs) currCol playerToChar = colToStr xs currCol playerToChar ++ " " ++ [playerToChar (x!!currCol)]
+  colToStr (x:xs) currCol playerToChar 
+    | xs == [] = callAgain
+    | otherwise = colToStr xs currCol playerToChar ++ " " ++ callAgain
+    where 
+        callAgain = [playerToChar (x!!currCol)]
