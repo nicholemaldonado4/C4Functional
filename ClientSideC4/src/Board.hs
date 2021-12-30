@@ -1,7 +1,6 @@
 -- Nichole Maldonado
 -- Lab 3 - Main.hs
 -- November 1, 2020
--- Dr. Cheon, CS3360
 
 -- Board representation that performs all the logic such as creating the board,
 -- representing the board as a string, and determining if a move was a
