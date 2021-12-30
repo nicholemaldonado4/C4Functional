@@ -1,7 +1,6 @@
 -- Nichole Maldonado
 -- Lab 3 - Main.hs
 -- October 30, 2020
--- Dr. Cheon, CS3360
 
 -- Main application of the Connect 4 Game. Runs the game and collects user
 -- input denoting the next move. Offers Multiplayer or against computer mode.
