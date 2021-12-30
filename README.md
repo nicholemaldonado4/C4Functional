@@ -8,5 +8,5 @@ Play Connect 4 against a component or against a computer.
 2. Then, type: ":load Main.hs"
 3. Next, enter "main" and play the game.
 
-OR
+OR\
 In ClientSideC4, run the app using ghci
