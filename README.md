@@ -1,4 +1,4 @@
-# C4HaskellFlipped
+# Connect 4 - Functional Approach
 
 Play Connect 4 against a component or against a computer.
 
